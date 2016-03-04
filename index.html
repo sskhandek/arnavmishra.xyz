@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>HackIllinois Homie</title>
+    <style>
+    #container {
+      margin: 0 auto;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    </style>
+    <script>
+    // Credit to milanocookies93 for the randomizers
+
+    var numRandoms = 7;
+    // preload images
+    function preload() {
+      var images = new Array(numRandoms);
+      for (var i = 1; i <= numRandoms; i++) {
+        images[i] = new Image();
+        images[i].src = "./bg/" + i + ".jpg";
+      }
+      return images;
+    }
+    var images = preload();
+    // random selector without repeat
+    function randInt(max) {
+      // range: [1, max]
+      return Math.ceil(Math.random() * max);
+    }
+    function RandSelect(num) {
+      this.num = num;
+      this.currNum = null;
+      var self = this;
+      RandSelect.prototype.random = function () {
+        var randNum;
+        if (this.currNum == null) {
+          var randNum = randInt(this.num);
+        } else {
+          var randNum = randInt(this.num-1);
+          if (randNum >= this.currNum) randNum += 1;
+        }
+        this.currNum = randNum;
+        return randNum;
+      };
+    }
+    var rand = new RandSelect(numRandoms);
+    function f() {
+      var el = document.getElementById("container");
+      el.style.background = "url('./bg/" + rand.random().toString() + ".jpg') no-repeat center center fixed";
+      el.style.backgroundSize = "100%";
+    }
+    </script>
+  </head>
+
+  <body>
+      <div id="container" onclick="f()"></div>
+      <script>f();</script>
+  </body>
+</html>
